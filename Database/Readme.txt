@@ -1,0 +1,1 @@
+Import the sql file in Xammp server

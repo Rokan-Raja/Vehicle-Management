@@ -1,0 +1,64 @@
+<?php
+if(isset($_POST['submit']))
+{
+    $customer=$_POST['cu'];
+    $vn=$_POST['vn'];
+    $ph=$_POST['ph'];
+    $type=$_POST['type'];
+    $stype=$_POST['stype'];
+    $date=date("Y/m/d");
+    setcookie("date",$date,time()+360*60);
+    setcookie("stype",$stype,time()+360*10);
+    setcookie("svn",$vn,time()+360*10);
+    $check="select *from service_bill where vehicle_no=$vn or phone=$ph ";
+    $query=mysqli_query($con,$check);
+    if(mysqli_num_rows($query)>0)
+    {   
+        if($stype=="water_wash")
+        {
+            $price=1000-(1000*(5/100));
+        }
+        if($stype=="dent_removal")
+        {
+            $price=500-(500*(5/100));
+        }
+        if($stype=="tyre_change")
+        {
+            $price=1200-(1200*(5/100));
+        }
+        $add="insert into service_bill(customer,vehicle_no,vehicle_type,service_type,phone,price,date) values('$customer',$vn,'$type','$stype',$ph,$price,'$date')";
+        $query=mysqli_query($con,$add);
+        $id=mysqli_insert_id($con);
+        setcookie("id",$id,time()+360*10);
+        if($query)
+        {
+            header("location:pdf.php");
+            exit();
+        }
+    }
+    else
+    {
+        if($stype=="water_wash")
+        {
+            $price=1000;
+        }
+        if($stype=="dent_removal")
+        {
+            $price=500;
+        }
+        if($stype=="tyre_change")
+        {
+            $price=1200;
+        }
+        $add="insert into service_bill(customer,vehicle_no,vehicle_type,service_type,phone,price,date) values('$customer',$vn,'$type','$stype',$ph,$price,'$date')";
+        $query=mysqli_query($con,$add);
+        $id=mysqli_insert_id($con);
+        setcookie("id",$id,time()+360*10);
+        if($query)
+        {
+            header("location:pdf.php");
+            exit();
+        }
+    }
+}
+?>
